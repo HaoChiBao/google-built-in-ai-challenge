@@ -258,8 +258,8 @@ const main = async () => {
             // const html = await response.json()
             const filler = document.createElement('gemini-highlight-short')
             // filler.innerHTML = html.html
-            // filler.innerHTML = ai_response
-            filler.innerHTML = `[ ${ai_response} ]`
+            filler.innerHTML = ai_response
+            // filler.innerHTML = `[ ${ai_response} ]`
             filler.id = `${id}-short`
             filler.classList.add('active')
             

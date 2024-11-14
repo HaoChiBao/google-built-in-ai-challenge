@@ -1,10 +1,28 @@
 const main = async () => {
     
+    
+            // console.log("Highlighted Text:", highlightedText);
+            
+            // const context = "condense the following text (be concise):\n"
+            // const ai_response = await session.prompt(context + highlightedText)
+            // console.log(ai_response)
+
+            // __________________ testing __________________
+            // const response = await fetch('http://localhost:8080/markdown', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({
+            //         text: ai_response
+            //     })
+            // })
+
     const actionHandler = async (request) => {
         const action = request.action
         
         switch(action){
-            
+
             case 'concise':
                 const session = await ai.languageModel.create()
                 console.log('shortening text...')

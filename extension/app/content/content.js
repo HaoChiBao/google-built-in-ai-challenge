@@ -42,18 +42,33 @@ const main = async () => {
     //     tone: "formal"
     // });
       
-
-
+    // Initialize highlight options container
     const container = document.createElement('gemini-dropdown')
     const outline = document.createElement('gemini-outline')
 
-    const dropdown = document.createElement('input')
+    const submit_btn = document.createElement('button')
+    
+    const dropdown = document.createElement('select')
     dropdown.type = 'dropdown'
+    dropdown.className = 'gemini-input'
+
+    const options = ['Concise', 'Elaborate'];
+    options.forEach(optionText => {
+        const option = document.createElement('option');
+        option.value = optionText;
+        option.textContent = optionText; 
+        dropdown.appendChild(option); 
+    });
+    dropdown.addEventListener('click', (e) => {e.stopPropagation()})
+
     const image = document.createElement('img')
     image.src =  await chrome.runtime.getURL('images/gemini-stars-smol.png')
 
+    submit_btn.appendChild(image)
+
+    outline.appendChild(submit_btn)
+
     outline.appendChild(dropdown)
-    outline.appendChild(image)
     container.appendChild(outline)
     document.body.appendChild(container)    
 
@@ -270,24 +285,6 @@ const main = async () => {
             highlightRange(range, id);
 
             selection.removeAllRanges();
-    
-    
-            // console.log("Highlighted Text:", highlightedText);
-            
-            // const context = "condense the following text (be concise):\n"
-            // const ai_response = await session.prompt(context + highlightedText)
-            // console.log(ai_response)
-
-            // __________________ testing __________________
-            // const response = await fetch('http://localhost:8080/markdown', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({
-            //         text: ai_response
-            //     })
-            // })
 
             await sendMessage({
                 action: 'concise',

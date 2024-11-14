@@ -11,14 +11,16 @@ gemini-dropdown{
 
 gemini-dropdown gemini-outline{
     position: relative;
-
+    
     display: flex;
     justify-content: center;
     align-items: center;
 
+    /* gap: 5px; */
+    
     height: 30px !important;
-    width: 30px !important;
-    /* padding: 5px !important; */
+    /* width: 30px !important; */
+    padding: 0 5px !important;
     
     border-radius: 10px;
     
@@ -31,10 +33,11 @@ gemini-dropdown gemini-outline{
     opacity: 0;
     transform: translateY(-25%);
     transition: 0.4s;
-
+    
     cursor: pointer;
     pointer-events: all;
 }
+
 
 gemini-dropdown.active{
     opacity: 1;
@@ -45,12 +48,65 @@ gemini-dropdown.active gemini-outline{
     transform: translateY(0);
 }
 
+gemini-dropdown gemini-outline .gemini-input{
+    height: calc(100% - 10px) !important;
+    
+    outline:none;
+    border:none;
+
+    color: #000;
+
+    background: linear-gradient(
+        to right,
+        #000000 20%,
+        #00affa 30%,
+        #aa98ae 70%,
+        #000000 80%
+        );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
+    background-size: 500% auto;
+    animation: textShine 2s ease-in infinite;
+
+    cursor: pointer;
+}
+
+gemini-outline button{
+    margin: 0;
+    padding: 0;
+    
+    background-color: transparent;
+    border: none;
+    
+    height: calc(100% - 10px) !important;
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+}
 
 gemini-outline img{
-    height: calc(100% - 10px) !important;
-    width: calc(100% - 10px) !important;
+    /* height: calc(100% - 10px) !important;
+    aspect-ratio: 1/1; */
+
+    height: 100%;
+    width: 100%;;
+
+    /* width: calc(100% - 10px) !important; */
     pointer-events: none;
+
+    transform: scale(0.7);
+    transition: 0.4s;
 }
+
+gemini-dropdown.active gemini-outline:hover img{
+    transform: scale(1);
+}
+
 
 /* ___________________________ Highlight CSS ______________________________ */
 

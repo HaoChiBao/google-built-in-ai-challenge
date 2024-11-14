@@ -208,18 +208,16 @@ const main = async () => {
     
         };
 
+        // move highlight to the same location as the highlight
         const rect = range.getBoundingClientRect()
-
-        // console.log(rect)
-
         container.style.left = `${rect.left + window.scrollX}px`;
         container.style.top = `${rect.top + window.scrollY - container.offsetHeight}px`;
-
         container.classList.add('active')
 
-
-        container.onclick = async () => {
+        // 
+        outline.onclick = async () => {
             const id = generateID()
+            console.log('highlight:', id)
             highlightRange(range, id);
 
             selection.removeAllRanges();
@@ -263,6 +261,7 @@ const main = async () => {
             const filler = document.createElement('gemini-highlight-short')
             // filler.innerHTML = html.html
             filler.innerHTML = ai_response
+            // filler.innerHTML = `[${ai_response}]`
             filler.id = `${id}-short`
             filler.classList.add('active')
             

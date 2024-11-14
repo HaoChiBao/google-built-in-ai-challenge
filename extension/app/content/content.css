@@ -26,6 +26,8 @@ gemini-dropdown #gemini-outline{
     opacity: 0;
     transform: translateY(-25%);
     transition: 0.4s;
+
+    cursor: pointer;
 }
 
 gemini-dropdown.active{
@@ -41,6 +43,7 @@ gemini-dropdown.active #gemini-outline{
 gemini-dropdown img{
     height: 100%;
     width: 100%;
+    /* pointer-events: none; */
 }
 
 /* ___________________________ Highlight CSS ______________________________ */

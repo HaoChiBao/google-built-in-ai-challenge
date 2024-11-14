@@ -1,0 +1,6 @@
+user highlights a piece of text on the web and the chrome extensions embeds a summarized version
+
+
+elborate and concise
+
+

@@ -85,34 +85,62 @@ const main = async () => {
       }
       
     
+    // if user unselects text then remove the floating icon
     document.addEventListener('selectionchange', function() {
         const selection = window.getSelection();
       
         if (!selection.toString()) {
-          console.log('Text has been unselected');
-    
           container.classList.remove('active')
-    
           return
         }
     })
 
     document.addEventListener('mouseup', function() {
         const selection = window.getSelection();
-        
-        // const selection = window.getSelection();
         if (!selection || selection.isCollapsed) return;
-    
         const range = selection.getRangeAt(0);
-        const highlights = [];
+
+        // check if the highlight overlaps with another highlight
+        const overlaps = (range) => {
+
+            const startContainer = range.startContainer;
+            const endContainer = range.endContainer;
     
-        // const commonAncestor = range.commonAncestorContainer
-        // const commonAncestorIndex = (Array.from(document.querySelectorAll(commonAncestor.tagName))).indexOf(commonAncestor)
-        // console.log(commonAncestor)
-        // console.log(commonAncestorIndex)
+            if (startContainer === endContainer) {
+                return startContainer.parentElement.nodeName == 'GEMINI-HIGHLIGHT' || startContainer.parentElement.nodeName == 'GEMINI-HIGHLIGHT-SHORT' 
+            } 
+            const nodesToHighlight = [];
     
+            const walkerFiltered = document.createTreeWalker(
+                range.commonAncestorContainer,
+                NodeFilter.SHOW_TEXT,
+                {
+                    acceptNode: (node) => {
+                        return range.intersectsNode(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+                    },
+                },
+                false
+            );
+
+            let currentNode;
+            while ((currentNode = walkerFiltered.nextNode())) {
+                nodesToHighlight.push(currentNode);
+            }
+
+            let overlap = false
+            nodesToHighlight.forEach(node => {
+                if (node.parentElement.nodeName == 'GEMINI-HIGHLIGHT' || node.parentElement.nodeName == 'GEMINI-HIGHLIGHT-SHORT') {
+                    overlap = true
+                }
+            })
+            return overlap
+        }
+
+        // if the highlight overlaps with another GEMINI-HIGHLIGHT then don't give the option to summarize 
+        if (overlaps(range)) return
+    
+        // highlight the user selected range and apply styling
         let highlightedText = "";
-    
         const highlightRange = (range, id) => {
             const startContainer = range.startContainer;
             const endContainer = range.endContainer;
@@ -148,24 +176,7 @@ const main = async () => {
             while ((currentNode = walkerFiltered.nextNode())) {
                 nodesToHighlight.push(currentNode);
             }
-    
-            const walkerUnfiltered = document.createTreeWalker(
-                range.commonAncestorContainer,
-                NodeFilter.SHOW_TEXT,
-                {
-                    acceptNode: (node) => {
-                        return NodeFilter.FILTER_ACCEPT
-                    },
-                },
-                false
-            );
-    
-            const nodesToCompare = [];
-            let currentComp;
-            while ((currentComp = walkerUnfiltered.nextNode())) {
-                nodesToCompare.push(currentComp);
-            }
-            
+
             nodesToHighlight.forEach(node => {
     
                 const isStartNode = node === startContainer;
@@ -216,11 +227,16 @@ const main = async () => {
     
             // console.log("Highlighted Text:", highlightedText);
             console.log('summarizing...')
-            const context = `
-                Here is the website context (only use context from the website): ${range.commonAncestorContainer.textContent}\n\n
+            // const context = `
+            //     Here is the website context (only use context from the website): ${range.commonAncestorContainer.textContent}\n\n
 
-                The following text is a highlighted portion of the context. logically summarizes the following text in a 1-3 sentences UNLESS the output is less than a sentence (the output cannot be longer than the input and you can not provide any new information that is not in the provided text):\n
-            `
+            //     The following text is a highlighted portion of the context. logically summarizes the following text in a 1-3 sentences UNLESS the output is less than a sentence (the output cannot be longer than the input and you can not provide any new information that is not in the provided text):\n
+            // `
+            // const context = `The following text is a highlighted portion of the context. summarizes the following text by 25% - 50% UNLESS the output is less than a sentence (the output cannot be longer than the input and you can not provide any new information that is not in the provided text):\n`
+            
+            // const context = "Summarize the following text by 50% - 75% (be clear and concise):\n"
+            const context = "MAKE THE FOLLOWING TEXT HALF AS LONG (be clear and concise):\n"
+            
             const ai_response = await session.prompt(context + highlightedText)
             // const ai_response = await summarizer.summarize(highlightedText)
             // const ai_response = await rewriter.rewrite(highlightedText, {
@@ -231,17 +247,17 @@ const main = async () => {
             console.log(ai_response)
 
             // __________________ testing __________________
-            const response = await fetch('http://localhost:8080/markdown', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    text: ai_response
-                })
-            })
+            // const response = await fetch('http://localhost:8080/markdown', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({
+            //         text: ai_response
+            //     })
+            // })
 
-            const html = await response.json()
+            // const html = await response.json()
             const filler = document.createElement('gemini-highlight-short')
             // filler.innerHTML = html.html
             filler.innerHTML = ai_response
@@ -255,6 +271,9 @@ const main = async () => {
             all_highlights.forEach(highlight => {
                 highlight.classList.remove('active')
             })
+
+            filler.addEventListener('mouseover', ()=> {filler.classList.add('hover')})
+            filler.addEventListener('mouseout', ()=> {filler.classList.remove('hover')})
 
             filler.addEventListener('click', ()=> {
                 filler.classList.remove('active')
@@ -288,7 +307,7 @@ const main = async () => {
             // METHOD 2: -----------------------------------------------------------------------------------------------------
             const first_highlight = document.querySelector(`#${id}`)
             first_highlight.parentElement.insertBefore(filler, first_highlight)
-            console.log(filler)
+            // console.log(filler)
 
         }
     });

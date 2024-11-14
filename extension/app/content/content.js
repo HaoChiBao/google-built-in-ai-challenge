@@ -109,7 +109,7 @@ const main = async () => {
         return highlightSpan;
     };
 
-    const attachHighlightShort = (ai_response, id) => {
+    const attachHighlightShort = (ai_response, id, color) => {
         
         const filler = document.createElement('gemini-highlight-short')
         // filler.innerHTML = html.html
@@ -117,10 +117,11 @@ const main = async () => {
         // filler.innerHTML = `[ ${ai_response} ]`
         filler.id = `${id}-short`
         filler.classList.add('active')
+        filler.style.setProperty('--text-color', color)
         
+        // hide original highlight text and display generated
         filler.classList.add('enter')
         setTimeout(()=>{ filler.classList.remove('enter') },1900)
-
         const all_highlights = document.querySelectorAll(`#${id}`)
         all_highlights.forEach(highlight => {
             highlight.classList.remove('active')
@@ -206,6 +207,8 @@ const main = async () => {
     
         // highlight the user selected range and apply styling
         let highlightedText = "";
+        let most_common_color = "#000"
+        let largest_count = 0;
         const highlightRange = (range, id) => {
             const startContainer = range.startContainer;
             const endContainer = range.endContainer;
@@ -242,8 +245,16 @@ const main = async () => {
                 nodesToHighlight.push(currentNode);
             }
 
+            const color_count = {}
             nodesToHighlight.forEach(node => {
-    
+                
+                // find the most common color in the highlighted text
+                // this will be the default color we use for the response color
+                const current_color = getComputedStyle(node.parentElement).color
+                if (color_count[current_color] == undefined || color_count[current_color] == null){
+                    color_count[current_color] = node.textContent.length
+                } else color_count[current_color] += node.textContent.length
+
                 const isStartNode = node === startContainer;
                 const isEndNode = node === endContainer;
     
@@ -270,7 +281,17 @@ const main = async () => {
                 replacementRange.deleteContents();
                 replacementRange.insertNode(highlightedSpan);
             });
-    
+
+            Object.keys(color_count).forEach(color => {
+                const count = color_count[color]
+                if (count > largest_count){
+                    largest_count = count
+                    most_common_color = color
+                }
+            })
+
+            // reset count
+            largest_count = 0
         };
 
         // move highlight to the same location as the highlight
@@ -282,14 +303,18 @@ const main = async () => {
         outline.onclick = async () => {
             const id = generateID()
             console.log('highlight:', id)
-            highlightRange(range, id);
 
+            // highlight selected range
+            highlightRange(range, id);
+            // remove user select highlight
             selection.removeAllRanges();
 
+            console.log('color:', most_common_color)
             await sendMessage({
                 action: 'concise',
                 highlightedText,
-                id
+                id,
+                most_common_color,
             })
 
             // return
@@ -309,7 +334,8 @@ const main = async () => {
                     console.log(request)
                     const concise = request.concise
                     const id_c = request.id
-                    attachHighlightShort(concise, id_c)
+                    const color_c = request.color
+                    attachHighlightShort(concise, id_c, color_c)
                     break
 
                 case 'test':

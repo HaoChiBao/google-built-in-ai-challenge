@@ -1,4 +1,5 @@
 gemini-dropdown{
+
     position: absolute;
     top: 0;
     left: 0;
@@ -142,6 +143,9 @@ gemini-highlight.active.hover{
 }
 
 gemini-highlight-short{
+
+    --text-color: #000;
+
     /* display: none; */
     opacity: 0;
     transition: 0.4s;
@@ -162,10 +166,10 @@ gemini-highlight-short.active{
     
     background: linear-gradient(
         to right,
-        #000000 20%,
+        var(--text-color) 20%,
         #00affa 30%,
         #aa98ae 70%,
-        #000000 80%
+        var(--text-color) 80%
         );
     -webkit-background-clip: text;
     background-clip: text;
@@ -181,6 +185,8 @@ gemini-highlight-short.active.hover{
     font-style: normal;
     font-weight: normal;
     border-radius: 2px;
+
+    color: var(--text-color);
 
     background: none;
     -webkit-background-clip: unset;
@@ -203,7 +209,7 @@ gemini-highlight-short.active.enter{
         #00000000 20%,
         #00affa 30%,
         #aa98ae 70%,
-        #000000 80%
+        var(--text-color) 80%
     );
     -webkit-background-clip: text;
     background-clip: text;

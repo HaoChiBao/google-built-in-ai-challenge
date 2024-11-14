@@ -28,12 +28,13 @@ const main = async () => {
                 console.log('shortening text...')
                 const text_c = request.highlightedText
                 const id_c = request.id
+                const color_c = request.most_common_color
                 // const context = "Summarize the following text by 50% (be clear and concise):\n"
                 // const context = "rewrite the following text shorter by 50% :\n"
                 // const context = "rewrite the following text shorter (be clear and concise):\n"
                 const context = "condense the following text (be concise):\n"
                 const ai_response = await session.prompt(context + text_c)
-                return {action, concise: ai_response, id: id_c}
+                return {action, concise: ai_response, id: id_c, color: color_c}
                 break
 
             case 'refresh':

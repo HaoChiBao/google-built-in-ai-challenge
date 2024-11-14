@@ -1,0 +1,40 @@
+{
+    "manifest_version": 3,
+    "name": "101 Google Built In AI",
+    "description": "lets do this..",
+    "version": "0.0.1",
+
+    "permissions": [
+        "scripting",
+        "activeTab",
+        "unlimitedStorage",
+        "storage",
+        "downloads"
+    ],
+    "host_permissions": ["<all_urls>"],
+    "web_accessible_resources":[{
+        "resources": ["/app/*", "/images/*"],
+        "matches": ["<all_urls>"]
+    }],
+    "icons": {
+        "16": "./images/icon.png",
+        "48": "./images/icon.png",
+        "128": "./images/icon.png"
+    },
+    "background": {
+        "service_worker": "./app/background/background.js",
+        "type": "module"
+    },
+    "action": {
+        "default_icon": "./images/icon.png",
+        "default_popup": "./app/popup/popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["./app/content/content.js"],
+            "css": ["./app/content/content.css"],
+            "run_at": "document_end"
+        }
+    ]
+}

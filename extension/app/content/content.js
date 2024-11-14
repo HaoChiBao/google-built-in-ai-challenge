@@ -234,8 +234,10 @@ const main = async () => {
             // `
             // const context = `The following text is a highlighted portion of the context. summarizes the following text by 25% - 50% UNLESS the output is less than a sentence (the output cannot be longer than the input and you can not provide any new information that is not in the provided text):\n`
             
-            // const context = "Summarize the following text by 50% - 75% (be clear and concise):\n"
-            const context = "MAKE THE FOLLOWING TEXT HALF AS LONG (be clear and concise):\n"
+            // const context = "Summarize the following text by 50% (be clear and concise):\n"
+            // const context = "rewrite the following text shorter by 50% :\n"
+            // const context = "rewrite the following text shorter (be clear and concise):\n"
+            const context = "condense the following text (be concise):\n"
             
             const ai_response = await session.prompt(context + highlightedText)
             // const ai_response = await summarizer.summarize(highlightedText)

@@ -111,11 +111,11 @@ gemini-highlight-short.active{
         #aa98ae 70%,
         #000000 80%
         );
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-fill-color: transparent;
-        background-size: 500% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
+    background-size: 500% auto;
     animation: textShine 2s ease-in infinite;
 }
 
@@ -125,6 +125,13 @@ gemini-highlight-short.active.hover{
     font-style: normal;
     font-weight: normal;
     border-radius: 2px;
+
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color:unset;
+    text-fill-color: unset;
+    background-size: unset;
 }
 
 gemini-highlight-short.active.enter{

@@ -30,8 +30,7 @@ const main = async () => {
 
 
     const container = document.createElement('gemini-dropdown')
-    const outline = document.createElement('div')
-    outline.id = 'gemini-outline'
+    const outline = document.createElement('gemini-outline')
     const image = document.createElement('img')
     image.src =  await chrome.runtime.getURL('images/gemini-stars-smol.png')
 
@@ -214,7 +213,6 @@ const main = async () => {
         container.style.top = `${rect.top + window.scrollY - container.offsetHeight}px`;
         container.classList.add('active')
 
-        // 
         outline.onclick = async () => {
             const id = generateID()
             console.log('highlight:', id)
@@ -260,8 +258,8 @@ const main = async () => {
             // const html = await response.json()
             const filler = document.createElement('gemini-highlight-short')
             // filler.innerHTML = html.html
-            filler.innerHTML = ai_response
-            // filler.innerHTML = `[${ai_response}]`
+            // filler.innerHTML = ai_response
+            filler.innerHTML = `[ ${ai_response} ]`
             filler.id = `${id}-short`
             filler.classList.add('active')
             
@@ -290,26 +288,11 @@ const main = async () => {
 
                 },400)
             })
-
-            // console.log(range.commonAncestorContainer)
-            // console.log(range.startContainer.parentElement)
-            // console.log(filler)
-
-
-            // METHOD 1: -----------------------------------------------------------------------------------------------------
-            // let start_parent = range.startContainer
-            // while (start_parent.parentElement && start_parent.parentElement != range.commonAncestorContainer){
-            //     start_parent = start_parent.parentElement
-            // }
-
-            // range.commonAncestorContainer.insertBefore(filler, start_parent)
             
-            
-            // METHOD 2: -----------------------------------------------------------------------------------------------------
+            // append the summary to the start of the highlight element
             const first_highlight = document.querySelector(`#${id}`)
             first_highlight.parentElement.insertBefore(filler, first_highlight)
-            // console.log(filler)
-
+            
         }
     });
     

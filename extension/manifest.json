@@ -17,16 +17,16 @@
         "matches": ["<all_urls>"]
     }],
     "icons": {
-        "16": "./images/icon.png",
-        "48": "./images/icon.png",
-        "128": "./images/icon.png"
+        "16": "./images/gemini-stars.png",
+        "48": "./images/gemini-stars.png",
+        "128": "./images/gemini-stars.png"
     },
     "background": {
         "service_worker": "./app/background/background.js",
         "type": "module"
     },
     "action": {
-        "default_icon": "./images/icon.png",
+        "default_icon": "./images/gemini-stars.png",
         "default_popup": "./app/popup/popup.html"
     },
     "content_scripts": [

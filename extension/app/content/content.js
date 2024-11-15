@@ -18,6 +18,8 @@ const sendMessage = async (msg) => {
     return true
 }
 
+const HIGHLIGHT_DELAY_TIME = 200
+
 const main = async () => {
     // const summarizer = await ai.summarizer.create({
     //     sharedContext: "summarize concisely",
@@ -109,7 +111,7 @@ const main = async () => {
 
                 const toggle = document.querySelector(`#${id}-toggle`)
                 toggle.classList.remove('active')
-            }, 400)
+            }, HIGHLIGHT_DELAY_TIME)
         })
 
         highlightSpan.addEventListener('click', () => {
@@ -148,6 +150,11 @@ const main = async () => {
                 parent.remove();
             }
         });
+
+        // get generated highlighted text and remove it 
+        // get toggle highlight and remove it 
+        const toggle = document.querySelector(`#${id}-toggle`)
+        toggle.remove()
     }
 
     const attachHighlightToggle = (id) => {
@@ -174,17 +181,24 @@ const main = async () => {
         toggle.className = 'custom-switch'
         
         const input = document.createElement('input')
-        input.id = 'toggle-goal-stats'
+        input.id = `toggle-goal-stats-${id}`
         input.class = 'custom-switch-active'
         input.type = 'checkbox'
         
         const label = document.createElement('label')
-        label.setAttribute('for', 'toggle-goal-stats')
+        label.setAttribute('for', `toggle-goal-stats-${id}`)
         
         toggle.appendChild(input)
         toggle.appendChild(label)
         // custom switch: end _____________________________________
 
+        input.addEventListener('change', () => {
+            if (input.checked) {
+                toggle.style.setProperty('--switch-background', '#7ECEFF')
+            } else {
+                toggle.style.setProperty('--switch-background', '#e1e1e1')
+            }
+        })
 
         holder.addEventListener('mouseover', () => {
             clearTimeout(highlight_delays[id])
@@ -193,14 +207,7 @@ const main = async () => {
             all_highlights.forEach(highlight => {
                 highlight.classList.add('hover')
             })   
-            
-            const first_highlight = document.querySelector(`#${id}`)
-            const toggle = document.querySelector(`#${id}-toggle`)
-
-            const rect = first_highlight.getBoundingClientRect()
-            toggle.style.left = `${rect.left + window.scrollX}px`;
-            toggle.style.top = `${rect.top + window.scrollY - toggle.offsetHeight}px`;
-            toggle.classList.add('active')
+            holder.classList.add('active')
         })
         
         holder.addEventListener('mouseout', () => {
@@ -209,10 +216,8 @@ const main = async () => {
                 all_highlights.forEach(highlight => {
                     highlight.classList.remove('hover')
                 })
-
-                const toggle = document.querySelector(`#${id}-toggle`)
-                toggle.classList.remove('active')
-            }, 400)
+                holder.classList.remove('active')
+            }, HIGHLIGHT_DELAY_TIME)
         })
 
         inside.appendChild(toggle)
@@ -224,7 +229,7 @@ const main = async () => {
 
     const attachHighlightText = (ai_response, id, color) => {
         
-        const filler = document.createElement('gemini-highlight-short')
+        const filler = document.createElement('gemini-highlight-gen')
         // filler.innerHTML = html.html
         filler.innerHTML = ai_response
         // filler.innerHTML = `[ ${ai_response} ]`
@@ -240,8 +245,34 @@ const main = async () => {
             highlight.classList.remove('active')
         })
 
-        filler.addEventListener('mouseover', ()=> {filler.classList.add('hover')})
-        filler.addEventListener('mouseout', ()=> {filler.classList.remove('hover')})
+        const toggle = document.querySelector(`#${id}-toggle`)
+        const checkmark = toggle.querySelector('input')
+        checkmark.checked = true
+        const event = new Event('change');
+        checkmark.dispatchEvent(event);
+
+        filler.addEventListener('mouseover', ()=> {
+            filler.classList.add('hover')
+
+            // reveal toggle element
+            clearTimeout(highlight_delays[id])
+            // const toggle = document.querySelector(`#${id}-toggle`)
+    
+            const rect = filler.getBoundingClientRect()
+            toggle.style.left = `${rect.left + window.scrollX}px`;
+            toggle.style.top = `${rect.top + window.scrollY - toggle.offsetHeight}px`;
+            toggle.classList.add('active')
+        })
+        
+        filler.addEventListener('mouseout', ()=> {
+            filler.classList.remove('hover')
+
+            highlight_delays[id] = setTimeout(()=>{
+                // const toggle = document.querySelector(`#${id}-toggle`)
+                toggle.classList.remove('active')
+            }, HIGHLIGHT_DELAY_TIME)
+            // hide toggle element
+        })
 
         filler.addEventListener('click', ()=> {
             filler.classList.remove('active')

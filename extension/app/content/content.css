@@ -168,7 +168,7 @@ gemini-highlight.active.hover{
     animation: gradient 3s linear infinite;
 }
 
-gemini-highlight-short{
+gemini-highlight-gen{
 
     --text-color: #000;
 
@@ -179,7 +179,7 @@ gemini-highlight-short{
     font-weight: normal;
 }
 
-gemini-highlight-short.active{
+gemini-highlight-gen.active{
     --color-main: #7ECEFF7e;
     --color-glare: #f9ddff7e;
     /* display: inline; */
@@ -205,7 +205,7 @@ gemini-highlight-short.active{
     animation: textShine 2s ease-in infinite;
 }
 
-gemini-highlight-short.active.hover{
+gemini-highlight-gen.active.hover{
     opacity: 1;
     
     font-style: normal;
@@ -222,7 +222,7 @@ gemini-highlight-short.active.hover{
     background-size: unset;
 }
 
-gemini-highlight-short.active.enter{
+gemini-highlight-gen.active.enter{
     /* display: inline; */
 
     opacity: 1;
@@ -276,7 +276,7 @@ gemini-highlight-short.active.enter{
     --switch-width: 30px;
 	--switch-height: calc(var(--switch-width) / 1.8);
 
-	--switch-background: #7ECEFF;
+	--switch-background: #e1e1e1;
 	--thumb-height: calc(4 * (var(--switch-height) / 6));
 	--thumb-width: var(--thumb-height);
 	--thumb-background: #fff;

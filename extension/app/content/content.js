@@ -113,7 +113,7 @@ const main = async () => {
                 toggle.classList.remove('active')
             }, HIGHLIGHT_DELAY_TIME)
         })
-
+        
         return highlightSpan;
     };
 
@@ -252,6 +252,14 @@ const main = async () => {
         filler.id = `${id}-short`
         filler.classList.add('active')
         filler.style.setProperty('--text-color', color)
+        
+        // hide original highlight text and display generated
+        filler.classList.add('enter')
+        setTimeout(()=>{ filler.classList.remove('enter') },1900)
+        const all_highlights = document.querySelectorAll(`#${id}`)
+        all_highlights.forEach(highlight => {
+            highlight.classList.remove('active')
+        })
 
         filler.addEventListener('mouseover', ()=> {
             filler.classList.add('hover')

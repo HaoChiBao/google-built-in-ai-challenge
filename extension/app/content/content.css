@@ -72,6 +72,7 @@ gemini-dropdown gemini-outline .gemini-input{
     animation: textShine 2s ease-in infinite;
 
     cursor: pointer;
+    user-select: none;
 }
 
 gemini-outline button{
@@ -99,6 +100,7 @@ gemini-outline img{
 
     /* width: calc(100% - 10px) !important; */
     pointer-events: none;
+    user-select: none;
 
     transform: scale(0.7);
     transition: 0.4s;
@@ -119,23 +121,38 @@ gemini-highlight{
 }
 
 gemini-highlight.active{
+    --color-main: #7ECEFF7e;
+    --color-glare: #f9ddff7e;
+
     display:inline;
     opacity: 1;
 
     border-radius: 2px;
-    --color-main: #7eceff30;
-    --color-glare: #f9ddff29;
-    /* --color-main: #7ECEFF7e;
-    --color-glare: #f9ddff7e; */
+    /* background: linear-gradient(0deg, var(--color-main) ,var(--color-main), var(--color-main), var(--color-glare), #00000000, #00000000, #00000000); */
     background: linear-gradient(0deg, var(--color-main) ,var(--color-main), var(--color-main), var(--color-glare), var(--color-main), var(--color-main), var(--color-main));
     background-size: 400% 400%;
     animation: gradient 3s linear infinite;
 }
 
-gemini-highlight.active.hover{
+gemini-highlight.active.enter{
     --color-main: #7ECEFF7e;
+    /* --color-main: ; */
     --color-glare: #f9ddff7e;
-    
+
+    display:inline;
+    opacity: 1;
+
+    border-radius: 2px;
+    background: linear-gradient(0deg, var(--color-main) ,var(--color-main), var(--color-main), var(--color-glare), #00000000, #00000000, #00000000);
+    /* background: linear-gradient(0deg, var(--color-main) ,var(--color-main), var(--color-main), var(--color-glare), var(--color-main), var(--color-main), var(--color-main)); */
+    background-size: 400% 400%;
+    animation: gradient 3s linear infinite;
+}
+
+gemini-highlight.active.hover{
+    --color-main: #7eceff30;
+    --color-glare: #f9ddff29;
+
     opacity: 1;
     background: linear-gradient(0deg, var(--color-main) ,var(--color-main), var(--color-main), var(--color-glare), var(--color-main), var(--color-main), var(--color-main));
     background-size: 400% 400%;

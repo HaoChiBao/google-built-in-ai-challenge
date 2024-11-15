@@ -78,6 +78,8 @@ const main = async () => {
         highlightSpan.id = id
         highlightSpan.textContent = text;
         highlightSpan.classList.add('active')
+        highlightSpan.classList.add('enter')
+        setTimeout(()=>{highlightSpan.classList.remove('enter')}, 2900)
 
         highlightSpan.addEventListener('mouseover', () => {
             const all_highlights = document.querySelectorAll(`#${id}`)

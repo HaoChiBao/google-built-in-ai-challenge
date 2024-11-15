@@ -18,7 +18,7 @@ const sendMessage = async (msg) => {
     return true
 }
 
-const HIGHLIGHT_DELAY_TIME = 200
+const HIGHLIGHT_DELAY_TIME = 150
 
 const main = async () => {
     // const summarizer = await ai.summarizer.create({
@@ -113,19 +113,6 @@ const main = async () => {
                 toggle.classList.remove('active')
             }, HIGHLIGHT_DELAY_TIME)
         })
-
-        // highlightSpan.addEventListener('click', () => {
-
-        //     const all_highlights = document.querySelectorAll(`#${id}`)
-        //     all_highlights.forEach(highlight => {
-        //         highlight.classList.remove('active')
-        //     })
-
-        //     const short = document.getElementById(`${id}-short`)
-        //     short.classList.add('active')
-        //     short.style.display = 'inline'
-
-        // })
 
         return highlightSpan;
     };
@@ -265,14 +252,6 @@ const main = async () => {
         filler.id = `${id}-short`
         filler.classList.add('active')
         filler.style.setProperty('--text-color', color)
-        
-        // hide original highlight text and display generated
-        // filler.classList.add('enter')
-        // setTimeout(()=>{ filler.classList.remove('enter') },1900)
-        // const all_highlights = document.querySelectorAll(`#${id}`)
-        // all_highlights.forEach(highlight => {
-        //     highlight.classList.remove('active')
-        // })
 
         filler.addEventListener('mouseover', ()=> {
             filler.classList.add('hover')
@@ -296,21 +275,6 @@ const main = async () => {
             }, HIGHLIGHT_DELAY_TIME)
             // hide toggle element
         })
-
-        // filler.addEventListener('click', ()=> {
-        //     filler.classList.remove('active')
-
-        //     setTimeout(()=>{
-
-        //         filler.style.display = 'none'
-                
-        //         const all_highlights = document.querySelectorAll(`#${id}`)
-        //         all_highlights.forEach(highlight => {
-        //             highlight.classList.add('active')
-        //         })
-
-        //     },400)
-        // })
         
         // append the summary to the start of the highlight element
         const first_highlight = document.querySelector(`#${id}`)

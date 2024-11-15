@@ -114,18 +114,18 @@ const main = async () => {
             }, HIGHLIGHT_DELAY_TIME)
         })
 
-        highlightSpan.addEventListener('click', () => {
+        // highlightSpan.addEventListener('click', () => {
 
-            const all_highlights = document.querySelectorAll(`#${id}`)
-            all_highlights.forEach(highlight => {
-                highlight.classList.remove('active')
-            })
+        //     const all_highlights = document.querySelectorAll(`#${id}`)
+        //     all_highlights.forEach(highlight => {
+        //         highlight.classList.remove('active')
+        //     })
 
-            const short = document.getElementById(`${id}-short`)
-            short.classList.add('active')
-            short.style.display = 'inline'
+        //     const short = document.getElementById(`${id}-short`)
+        //     short.classList.add('active')
+        //     short.style.display = 'inline'
 
-        })
+        // })
 
         return highlightSpan;
     };
@@ -193,10 +193,39 @@ const main = async () => {
         // custom switch: end _____________________________________
 
         input.addEventListener('change', () => {
+
+            // ____________________________ ON _______________________________
             if (input.checked) {
-                toggle.style.setProperty('--switch-background', '#7ECEFF')
+                toggle.style.setProperty('--switch-background', '#448cd0')
+                
+                const all_highlights = document.querySelectorAll(`#${id}`)
+                all_highlights.forEach(highlight => {
+                    highlight.classList.remove('active')
+                })
+                
+                const short = document.getElementById(`${id}-short`)
+                short.classList.add('active')
+                short.style.display = 'inline'
+                
+                
+                // ____________________________ OFF _______________________________
             } else {
                 toggle.style.setProperty('--switch-background', '#e1e1e1')
+                
+                const filler = document.querySelector(`#${id}-short`)
+                filler.classList.remove('active')
+                
+                setTimeout(()=>{
+    
+                    filler.style.display = 'none'
+                    
+                    const all_highlights = document.querySelectorAll(`#${id}`)
+                    all_highlights.forEach(highlight => {
+                        highlight.classList.add('active')
+                    })
+    
+                }, 400)
+                
             }
         })
 
@@ -238,18 +267,12 @@ const main = async () => {
         filler.style.setProperty('--text-color', color)
         
         // hide original highlight text and display generated
-        filler.classList.add('enter')
-        setTimeout(()=>{ filler.classList.remove('enter') },1900)
-        const all_highlights = document.querySelectorAll(`#${id}`)
-        all_highlights.forEach(highlight => {
-            highlight.classList.remove('active')
-        })
-
-        const toggle = document.querySelector(`#${id}-toggle`)
-        const checkmark = toggle.querySelector('input')
-        checkmark.checked = true
-        const event = new Event('change');
-        checkmark.dispatchEvent(event);
+        // filler.classList.add('enter')
+        // setTimeout(()=>{ filler.classList.remove('enter') },1900)
+        // const all_highlights = document.querySelectorAll(`#${id}`)
+        // all_highlights.forEach(highlight => {
+        //     highlight.classList.remove('active')
+        // })
 
         filler.addEventListener('mouseover', ()=> {
             filler.classList.add('hover')
@@ -274,24 +297,31 @@ const main = async () => {
             // hide toggle element
         })
 
-        filler.addEventListener('click', ()=> {
-            filler.classList.remove('active')
+        // filler.addEventListener('click', ()=> {
+        //     filler.classList.remove('active')
 
-            setTimeout(()=>{
+        //     setTimeout(()=>{
 
-                filler.style.display = 'none'
+        //         filler.style.display = 'none'
                 
-                const all_highlights = document.querySelectorAll(`#${id}`)
-                all_highlights.forEach(highlight => {
-                    highlight.classList.add('active')
-                })
+        //         const all_highlights = document.querySelectorAll(`#${id}`)
+        //         all_highlights.forEach(highlight => {
+        //             highlight.classList.add('active')
+        //         })
 
-            },400)
-        })
+        //     },400)
+        // })
         
         // append the summary to the start of the highlight element
         const first_highlight = document.querySelector(`#${id}`)
         first_highlight.parentElement.insertBefore(filler, first_highlight)
+
+        // toggle box on
+        const toggle = document.querySelector(`#${id}-toggle`)
+        const checkmark = toggle.querySelector('input')
+        checkmark.checked = true
+        const event = new Event('change');
+        checkmark.dispatchEvent(event);
         
     }
     

@@ -4,3 +4,11 @@ user highlights a piece of text on the web and the chrome extensions embeds a su
 elborate and concise
 
 
+write/rewrite do not work
+
+prompt:
+despite being in english the program returns an error of: 
+* background.js:41 NotSupportedError: The model attempted to output text in an untested language, and was prevented from doing so.
+
+this is possibly due to uncommon names within the text (ai doesn't recognize them)
+

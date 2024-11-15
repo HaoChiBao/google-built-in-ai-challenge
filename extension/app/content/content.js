@@ -109,6 +109,28 @@ const main = async () => {
         return highlightSpan;
     };
 
+    const unhighlightSpan = (id) => {
+        const highlights = document.querySelectorAll(`#${id}`)
+
+        if (highlights.length === 0) {
+            console.warn(`No highlights found with ID: ${id}`);
+            return;
+        }
+    
+        // Iterate through each highlighted span and replace it with its plain text content
+        highlights.forEach((highlightSpan) => {
+            const parent = highlightSpan.parentNode;
+    
+            // Replace the highlighted span with its plain text content
+            parent.replaceChild(document.createTextNode(highlightSpan.textContent), highlightSpan);
+    
+            // Optionally clean up any empty parent elements if needed
+            if (parent.nodeType === Node.ELEMENT_NODE && parent.textContent.trim() === '') {
+                parent.remove();
+            }
+        });
+    }
+
     const attachHighlightShort = (ai_response, id, color) => {
         
         const filler = document.createElement('gemini-highlight-short')
@@ -332,10 +354,17 @@ const main = async () => {
                 
                 case 'concise':
                     console.log(request)
-                    const concise = request.concise
+                    const status_c = request.status
                     const id_c = request.id
-                    const color_c = request.color
-                    attachHighlightShort(concise, id_c, color_c)
+                    
+                    if (status_c) {
+                        const concise = request.concise
+                        const color_c = request.color
+                        attachHighlightShort(concise, id_c, color_c)
+                    } else {
+                        unhighlightSpan(id_c)
+                    }
+
                     break
 
                 case 'test':

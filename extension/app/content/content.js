@@ -72,7 +72,7 @@ const main = async () => {
     container.appendChild(outline)
     document.body.appendChild(container)    
 
-        
+    const highlight_delays = {}
     const wrapInHighlightSpan = (text, id) => {
         const highlightSpan = document.createElement("gemini-highlight");
         highlightSpan.id = id
@@ -81,18 +81,35 @@ const main = async () => {
         highlightSpan.classList.add('enter')
         setTimeout(()=>{highlightSpan.classList.remove('enter')}, 2900)
 
+        highlight_delays[id] = null
         highlightSpan.addEventListener('mouseover', () => {
+            clearTimeout(highlight_delays[id])
+
             const all_highlights = document.querySelectorAll(`#${id}`)
             all_highlights.forEach(highlight => {
                 highlight.classList.add('hover')
-            })            
+            })   
+            
+            const first_highlight = document.querySelector(`#${id}`)
+            const toggle = document.querySelector(`#${id}-toggle`)
+
+
+            const rect = first_highlight.getBoundingClientRect()
+            toggle.style.left = `${rect.left + window.scrollX}px`;
+            toggle.style.top = `${rect.top + window.scrollY - toggle.offsetHeight}px`;
+            toggle.classList.add('active')
         })
         
         highlightSpan.addEventListener('mouseout', () => {
-            const all_highlights = document.querySelectorAll(`#${id}`)
-            all_highlights.forEach(highlight => {
-                highlight.classList.remove('hover')
-            })
+            highlight_delays[id] = setTimeout(()=>{
+                const all_highlights = document.querySelectorAll(`#${id}`)
+                all_highlights.forEach(highlight => {
+                    highlight.classList.remove('hover')
+                })
+
+                const toggle = document.querySelector(`#${id}-toggle`)
+                toggle.classList.remove('active')
+            }, 400)
         })
 
         highlightSpan.addEventListener('click', () => {
@@ -133,7 +150,79 @@ const main = async () => {
         });
     }
 
-    const attachHighlightShort = (ai_response, id, color) => {
+    const attachHighlightToggle = (id) => {
+        const holder = document.createElement('gemini-dropdown')
+        holder.id = `${id}-toggle`
+        const inside = document.createElement('gemini-outline')
+
+        const dropdown = document.createElement('select')
+        dropdown.type = 'dropdown'
+        dropdown.className = 'gemini-input'
+
+        const options = ['Concise', 'Elaborate'];
+        options.forEach(optionText => {
+            const option = document.createElement('option');
+            option.value = optionText;
+            option.textContent = optionText; 
+            dropdown.appendChild(option); 
+        });
+        dropdown.addEventListener('click', (e) => {e.stopPropagation()})
+
+        // create toggle element
+        // custom switch: start _____________________________________
+        const toggle = document.createElement('span')
+        toggle.className = 'custom-switch'
+        
+        const input = document.createElement('input')
+        input.id = 'toggle-goal-stats'
+        input.class = 'custom-switch-active'
+        input.type = 'checkbox'
+        
+        const label = document.createElement('label')
+        label.setAttribute('for', 'toggle-goal-stats')
+        
+        toggle.appendChild(input)
+        toggle.appendChild(label)
+        // custom switch: end _____________________________________
+
+
+        holder.addEventListener('mouseover', () => {
+            clearTimeout(highlight_delays[id])
+
+            const all_highlights = document.querySelectorAll(`#${id}`)
+            all_highlights.forEach(highlight => {
+                highlight.classList.add('hover')
+            })   
+            
+            const first_highlight = document.querySelector(`#${id}`)
+            const toggle = document.querySelector(`#${id}-toggle`)
+
+            const rect = first_highlight.getBoundingClientRect()
+            toggle.style.left = `${rect.left + window.scrollX}px`;
+            toggle.style.top = `${rect.top + window.scrollY - toggle.offsetHeight}px`;
+            toggle.classList.add('active')
+        })
+        
+        holder.addEventListener('mouseout', () => {
+            highlight_delays[id] = setTimeout(()=>{
+                const all_highlights = document.querySelectorAll(`#${id}`)
+                all_highlights.forEach(highlight => {
+                    highlight.classList.remove('hover')
+                })
+
+                const toggle = document.querySelector(`#${id}-toggle`)
+                toggle.classList.remove('active')
+            }, 400)
+        })
+
+        inside.appendChild(toggle)
+        inside.appendChild(dropdown)
+        holder.appendChild(inside)
+
+        document.body.appendChild(holder)
+    }
+
+    const attachHighlightText = (ai_response, id, color) => {
         
         const filler = document.createElement('gemini-highlight-short')
         // filler.innerHTML = html.html
@@ -333,6 +422,8 @@ const main = async () => {
             // remove user select highlight
             selection.removeAllRanges();
 
+            attachHighlightToggle(id)
+
             console.log('color:', most_common_color)
             await sendMessage({
                 action: 'concise',
@@ -362,7 +453,7 @@ const main = async () => {
                     if (status_c) {
                         const concise = request.concise
                         const color_c = request.color
-                        attachHighlightShort(concise, id_c, color_c)
+                        attachHighlightText(concise, id_c, color_c)
                     } else {
                         unhighlightSpan(id_c)
                     }

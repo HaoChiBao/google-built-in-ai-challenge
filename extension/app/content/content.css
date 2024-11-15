@@ -8,6 +8,7 @@ gemini-dropdown{
 
     opacity: 0;
     pointer-events: none;
+
 }
 
 gemini-dropdown gemini-outline{
@@ -36,17 +37,19 @@ gemini-dropdown gemini-outline{
     transition: 0.4s;
     
     cursor: pointer;
-    pointer-events: all;
+    pointer-events: none;
 }
 
 
 gemini-dropdown.active{
     opacity: 1;
     pointer-events: all;
+    display: unset;
 }
 gemini-dropdown.active gemini-outline{
     opacity: 1;
     transform: translateY(0);
+    pointer-events: all;
 }
 
 gemini-dropdown gemini-outline .gemini-input{
@@ -56,6 +59,12 @@ gemini-dropdown gemini-outline .gemini-input{
     border:none;
 
     color: #000;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 14px;
 
     background: linear-gradient(
         to right,
@@ -91,7 +100,7 @@ gemini-outline button{
     cursor: pointer;
 }
 
-gemini-outline img{
+gemini-outline button img{
     /* height: calc(100% - 10px) !important;
     aspect-ratio: 1/1; */
 
@@ -106,7 +115,7 @@ gemini-outline img{
     transition: 0.4s;
 }
 
-gemini-dropdown.active gemini-outline:hover img{
+gemini-dropdown.active button:hover img{
     transform: scale(1);
 }
 
@@ -258,4 +267,70 @@ gemini-highlight-short.active.enter{
         background-position: 50% 100%;
         opacity: 1;
 	}
+}
+
+
+/* custom toggle css */
+
+.custom-switch{
+    --switch-width: 30px;
+	--switch-height: calc(var(--switch-width) / 1.8);
+
+	--switch-background: #7ECEFF;
+	--thumb-height: calc(4 * (var(--switch-height) / 6));
+	--thumb-width: var(--thumb-height);
+	--thumb-background: #fff;
+	--gap-vertical: calc((var(--switch-height) / 6));
+	--gap-side: calc(var(--switch-width) / 10);
+	--border-radius: var(--switch-width);
+
+    margin-left: 3px;
+    margin-right: 5px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-switch input[type=checkbox] {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+    display: none;
+}
+.custom-switch label {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    cursor: pointer;
+    text-indent: -9999px;
+    width: var(--switch-width);
+    max-width: 80vw;
+    height: var(--switch-height);
+    background: var(--switch-background);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+}
+.custom-switch label:after {
+    content: '';
+    position: absolute;
+    top: var(--gap-vertical);
+    left: var(--gap-side);
+    width: var(--thumb-width);
+    height: var(--thumb-height);
+    background: var(--thumb-background);
+    border-radius: 100px;
+    transition: 0.3s;
+}
+.custom-switch input:checked + label {
+    background: var(--switch-background);
+}
+.custom-switch input:checked + label:after {
+    left: calc(90%);
+    transform: translateX(-100%);
+}
+.custom-switch label:active:after {
+    width: calc(var(--switch-width) / 2);
 }

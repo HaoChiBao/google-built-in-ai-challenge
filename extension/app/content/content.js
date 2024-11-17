@@ -113,7 +113,7 @@ const main = async () => {
                 toggle.classList.remove('active')
             }, HIGHLIGHT_DELAY_TIME)
         })
-        
+
         return highlightSpan;
     };
 
@@ -478,6 +478,9 @@ const main = async () => {
             // console.log(request)
             switch(action){
                 
+                // case 'color-filter':
+                //     console.log(action)
+                //     break;
                 case 'concise':
                     console.log(request)
                     const status_c = request.status

@@ -1,5 +1,7 @@
+import AIResponse from "./async/func/AIResponse.js"
+import { Solver, Color } from "./async/func/colorToFilterCSS.js"
+
 const main = async () => {
-    
     
             // console.log("Highlighted Text:", highlightedText);
             
@@ -28,19 +30,22 @@ const main = async () => {
                 const text_c = request.highlightedText
                 const id_c = request.id
                 const color_c = request.most_common_color
-                try{
-                    // throw new Error('Test!');
-                    const session = await ai.languageModel.create()
-                    // const context = "Summarize the following text by 50% (be clear and concise):\n"
-                    // const context = "rewrite the following text shorter by 50% :\n"
-                    // const context = "rewrite the following text shorter (be clear and concise):\n"
-                    const context = "condense the following text (be concise):\n"
-                    const ai_response = await session.prompt(context + text_c)
+
+                // ____________________ get the ai response ____________________
+
+                // const context = "Summarize the following text by 50% (be clear and concise):\n"
+                // const context = "rewrite the following text shorter by 50% :\n"
+                // const context = "rewrite the following text shorter (be clear and concise):\n"
+                const context = "condense the following text (be concise):\n"
+
+                const response = await AIResponse(context + text_c) 
+
+                if (response.status){
+                    const ai_response = response.ai_response
                     return {action, status: true, concise: ai_response, id: id_c, color: color_c}
-                } catch (e) {
-                    console.warn(e)
-                    return {action, status: false, id: id_c}
                 }
+
+                return {action, status: false, id: id_c}
                 break
 
             case 'refresh':

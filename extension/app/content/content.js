@@ -188,10 +188,8 @@ const main = async () => {
 
             const all_generated = document.querySelectorAll(`#${id}-short`)
             all_generated.forEach(generated => {
-                if (generated == current_generated){
-                    console.log('SAME!!!')
-                    return
-                }
+                if (generated == current_generated) return
+
                 generated.classList.remove('active')
                 setTimeout(()=>{
                     generated.style.display = 'none'
@@ -232,8 +230,6 @@ const main = async () => {
                 
                 // const short = document.getElementById(`${id}-short`)
                 const short = document.querySelector(`#${id}-short.selection${selection}`)
-                console.log(selection)
-                console.log(short)
                 short.classList.add('active')
                 short.style.display = 'inline'
                 
@@ -562,7 +558,7 @@ const main = async () => {
                         checkmark.checked = true
                         const event = new Event('change');
                         checkmark.dispatchEvent(event);
-                        
+
                     } else {
                         unhighlightSpan(id_c)
                     }

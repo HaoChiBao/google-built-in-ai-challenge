@@ -12,3 +12,9 @@ despite being in english the program returns an error of:
 
 this is possibly due to uncommon names within the text (ai doesn't recognize them)
 
+
+
+Things to add:
+* working copy paste
+* X to delete highlights
+    * this could be located next to copy or it can be in its own module

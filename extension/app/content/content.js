@@ -169,8 +169,6 @@ const main = async () => {
         dropdown.type = 'dropdown'
         dropdown.className = 'gemini-input'
 
-        // let current_option = 'Concise'
-        let current_option = 0
         const options = ['Concise', 'Elaborate'];
         options.forEach(optionText => {
             const option = document.createElement('option');
@@ -181,9 +179,8 @@ const main = async () => {
         dropdown.addEventListener('click', (e) => {e.stopPropagation()})
         dropdown.addEventListener('change', (e) => {
             const selection = e.target.selectedIndex
-            current_option = selection
 
-            const current_generated = document.querySelector(`#${id}-short.selection${current_option}`)
+            const current_generated = document.querySelector(`#${id}-short.selection${selection}`)
             setTimeout(()=>{
                 current_generated.classList.add('active')
                 current_generated.style.display = 'inline'
@@ -221,7 +218,8 @@ const main = async () => {
         // custom switch: end _____________________________________
 
         input.addEventListener('change', () => {
-
+            
+            const selection = dropdown.selectedIndex
             // ____________________________ ON _______________________________
             if (input.checked) {
                 toggle.style.setProperty('--switch-background', '#448cd0')
@@ -230,9 +228,12 @@ const main = async () => {
                 all_highlights.forEach(highlight => {
                     highlight.classList.remove('active')
                 })
+
                 
                 // const short = document.getElementById(`${id}-short`)
-                const short = document.querySelector(`#${id}-short.selection${current_option}`)
+                const short = document.querySelector(`#${id}-short.selection${selection}`)
+                console.log(selection)
+                console.log(short)
                 short.classList.add('active')
                 short.style.display = 'inline'
                 
@@ -241,7 +242,7 @@ const main = async () => {
                 toggle.style.setProperty('--switch-background', '#e1e1e1')
                 
                 // const filler = document.querySelector(`#${id}-short`)
-                const filler = document.querySelector(`#${id}-short.selection${current_option}`)
+                const filler = document.querySelector(`#${id}-short.selection${selection}`)
                 filler.classList.remove('active')
                 
                 setTimeout(()=>{
@@ -304,7 +305,8 @@ const main = async () => {
         // check if we are starting with Concise or Elaborate or etc
         if(start == type ){
             // reveal generated text
-            toggle.selectedIndex = start
+            const select = toggle.querySelector('select')
+            select.selectedIndex = start
 
             filler.classList.add('active')
             filler.classList.add('enter')
@@ -346,12 +348,6 @@ const main = async () => {
         // append the summary to the start of the highlight element
         const first_highlight = document.querySelector(`#${id}`)
         first_highlight.parentElement.insertBefore(filler, first_highlight)
-
-        // toggle box on
-        const checkmark = toggle.querySelector('input')
-        checkmark.checked = true
-        const event = new Event('change');
-        checkmark.dispatchEvent(event);
         
     }
     
@@ -554,12 +550,19 @@ const main = async () => {
 
                         const start = request.start
 
-                        console.log(start)
-                        const toggle = document.querySelector(`#${id_c}-toggle`)
-                        toggle.selectedIndex = start
+                        const dropdown = document.querySelector(`#${id_c}-toggle`)
+                        const select = dropdown.querySelector('select')
+                        select.selectedIndex = start
 
-                        attachHighlightText(concise, id_c, color_c, filter_c, 0, start)
                         attachHighlightText(elaborate, id_c, color_c, filter_c, 1, start)
+                        attachHighlightText(concise, id_c, color_c, filter_c, 0, start)
+
+                        // toggle box on
+                        const checkmark = dropdown.querySelector('input')
+                        checkmark.checked = true
+                        const event = new Event('change');
+                        checkmark.dispatchEvent(event);
+                        
                     } else {
                         unhighlightSpan(id_c)
                     }

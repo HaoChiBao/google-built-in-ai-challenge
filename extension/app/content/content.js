@@ -19,6 +19,7 @@ const sendMessage = async (msg) => {
 }
 
 const HIGHLIGHT_DELAY_TIME = 150
+let starting_gen = 0
 
 const main = async () => {
     // const summarizer = await ai.summarizer.create({
@@ -62,6 +63,9 @@ const main = async () => {
         dropdown.appendChild(option); 
     });
     dropdown.addEventListener('click', (e) => {e.stopPropagation()})
+    dropdown.addEventListener('change', (e) => {
+        starting_gen = e.target.selectedIndex
+    })
 
     const image = document.createElement('img')
     image.src =  await chrome.runtime.getURL('images/gemini-stars-smol.png')
@@ -165,6 +169,8 @@ const main = async () => {
         dropdown.type = 'dropdown'
         dropdown.className = 'gemini-input'
 
+        // let current_option = 'Concise'
+        let current_option = 0
         const options = ['Concise', 'Elaborate'];
         options.forEach(optionText => {
             const option = document.createElement('option');
@@ -173,6 +179,29 @@ const main = async () => {
             dropdown.appendChild(option); 
         });
         dropdown.addEventListener('click', (e) => {e.stopPropagation()})
+        dropdown.addEventListener('change', (e) => {
+            const selection = e.target.selectedIndex
+            current_option = selection
+
+            const current_generated = document.querySelector(`#${id}-short.selection${current_option}`)
+            setTimeout(()=>{
+                current_generated.classList.add('active')
+                current_generated.style.display = 'inline'
+            }, 400)
+
+            const all_generated = document.querySelectorAll(`#${id}-short`)
+            all_generated.forEach(generated => {
+                if (generated == current_generated){
+                    console.log('SAME!!!')
+                    return
+                }
+                generated.classList.remove('active')
+                setTimeout(()=>{
+                    generated.style.display = 'none'
+                }, 400)
+            })
+
+        })
 
         // create toggle element
         // custom switch: start _____________________________________
@@ -202,16 +231,17 @@ const main = async () => {
                     highlight.classList.remove('active')
                 })
                 
-                const short = document.getElementById(`${id}-short`)
+                // const short = document.getElementById(`${id}-short`)
+                const short = document.querySelector(`#${id}-short.selection${current_option}`)
                 short.classList.add('active')
                 short.style.display = 'inline'
-                
                 
                 // ____________________________ OFF _______________________________
             } else {
                 toggle.style.setProperty('--switch-background', '#e1e1e1')
                 
-                const filler = document.querySelector(`#${id}-short`)
+                // const filler = document.querySelector(`#${id}-short`)
+                const filler = document.querySelector(`#${id}-short.selection${current_option}`)
                 filler.classList.remove('active')
                 
                 setTimeout(()=>{
@@ -258,23 +288,37 @@ const main = async () => {
         document.body.appendChild(holder)
     }
 
-    const attachHighlightText = async (ai_response, id, color, filter) => {
-
+    const attachHighlightText = async (ai_response, id, color, filter, type, start) => {
+        // console.log(type, start)
         const filler = document.createElement('gemini-highlight-gen')
-        // filler.innerHTML = html.html
+        // add text
         filler.innerHTML = ai_response
-        // filler.innerHTML = `[ ${ai_response} ]`
-        filler.id = `${id}-short`
-        filler.classList.add('active')
-        filler.style.setProperty('--text-color', color)
         
-        // hide original highlight text and display generated
-        filler.classList.add('enter')
-        setTimeout(()=>{ filler.classList.remove('enter') },1900)
-        const all_highlights = document.querySelectorAll(`#${id}`)
-        all_highlights.forEach(highlight => {
-            highlight.classList.remove('active')
-        })
+        filler.id = `${id}-short`
+        filler.classList.add(`selection${type}`)
+        filler.style.setProperty('--text-color', color)
+        filler.style.display = 'none'
+
+        const toggle = document.querySelector(`#${id}-toggle`)
+        
+        // check if we are starting with Concise or Elaborate or etc
+        if(start == type ){
+            // reveal generated text
+            toggle.selectedIndex = start
+
+            filler.classList.add('active')
+            filler.classList.add('enter')
+            filler.style.display = 'inline'
+
+            setTimeout(()=>{ filler.classList.remove('enter') },1900)
+            
+            // hide original highlight text and display generated
+            const all_highlights = document.querySelectorAll(`#${id}`)
+            all_highlights.forEach(highlight => {
+                highlight.classList.remove('active')
+            })
+
+        }
 
         filler.addEventListener('mouseover', ()=> {
             filler.classList.add('hover')
@@ -304,7 +348,6 @@ const main = async () => {
         first_highlight.parentElement.insertBefore(filler, first_highlight)
 
         // toggle box on
-        const toggle = document.querySelector(`#${id}-toggle`)
         const checkmark = toggle.querySelector('input')
         checkmark.checked = true
         const event = new Event('change');
@@ -461,6 +504,7 @@ const main = async () => {
         container.style.top = `${rect.top + window.scrollY - container.offsetHeight}px`;
         container.classList.add('active')
 
+        // overwrite button onclick so it always serves a new highlight
         outline.onclick = async () => {
             const id = generateID()
             console.log('highlight:', id)
@@ -474,10 +518,12 @@ const main = async () => {
 
             console.log('color:', most_common_color)
             await sendMessage({
-                action: 'concise',
+                action: 'generate',
+                // action: 'concise',
                 highlightedText,
                 id,
                 most_common_color,
+                starting_gen,
             })
 
             // return
@@ -493,19 +539,27 @@ const main = async () => {
             // console.log(request)
             switch(action){
                 
-                // case 'color-filter':
-                //     console.log(action)
-                //     break;
-                case 'concise':
+                // case 'concise':
+                case 'generate':
                     console.log(request)
                     const status_c = request.status
                     const id_c = request.id
                     
                     if (status_c) {
                         const concise = request.concise
+                        const elaborate = request.elaborate
+
                         const color_c = request.color
                         const filter_c  = request.filter
-                        attachHighlightText(concise, id_c, color_c, filter_c)
+
+                        const start = request.start
+
+                        console.log(start)
+                        const toggle = document.querySelector(`#${id_c}-toggle`)
+                        toggle.selectedIndex = start
+
+                        attachHighlightText(concise, id_c, color_c, filter_c, 0, start)
+                        attachHighlightText(elaborate, id_c, color_c, filter_c, 1, start)
                     } else {
                         unhighlightSpan(id_c)
                     }

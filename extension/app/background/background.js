@@ -25,21 +25,23 @@ const main = async () => {
         
         switch(action){
 
-            case 'concise':
-                console.log('shortening text...')
+            // case 'concise':
+            case 'generate':
+                console.log('generating text...')
                 const text_c = request.highlightedText
                 const id_c = request.id
                 const color_c = request.most_common_color
+                const start = request.starting_gen
 
                 // ____________________ get filter color for copy button in the response ____________________
                 
-                const rgb = rgbSeparator(color_c)
-                // console.log(rgb)
+                // const rgb = rgbSeparator(color_c)
 
-                const color = new Color(rgb[0], rgb[1], rgb[2]);
-                const solver = new Solver(color);
-                const result = solver.solve();
-                const filter = result.filter
+                // const color = new Color(rgb[0], rgb[1], rgb[2]);
+                // const solver = new Solver(color);
+                // const result = solver.solve();
+                // const filter = result.filter
+                const filter = 0
 
                 // console.log(result)
 
@@ -48,13 +50,24 @@ const main = async () => {
                 // const context = "Summarize the following text by 50% (be clear and concise):\n"
                 // const context = "rewrite the following text shorter by 50% :\n"
                 // const context = "rewrite the following text shorter (be clear and concise):\n"
-                const context = "condense the following text (be concise):\n"
-                const response = await AIResponse(context + text_c) 
+                const concise_context = "condense the following text (be concise):\n"
+                const elaborate_context = "make the following text a TINY BIT longer:\n"
+                const short = await AIResponse(concise_context + text_c) 
+                const long = await AIResponse(elaborate_context + text_c) 
 
                 // return response. TRUE if response returns successfully
-                if (response.status){
-                    const ai_response = response.ai_response
-                    return {action, status: true, concise: ai_response, id: id_c, color: color_c, filter}
+                if (short.status && long.status){
+                    const concise = short.ai_response
+                    const elaborate = long.ai_response
+                    return {
+                        action, status: true, 
+                        concise, 
+                        elaborate,
+                        id: id_c, 
+                        color: color_c, 
+                        filter,
+                        start,
+                    }
                 }
 
                 return {action, status: false, id: id_c}

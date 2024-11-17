@@ -57,15 +57,18 @@ gemini-dropdown gemini-outline .gemini-input{
     
     outline:none;
     border:none;
-
+    
     color: #000;
-
+    
     display: flex;
     justify-content: center;
     align-items: center;
-
+    
     font-size: 14px;
 
+    padding: 0;
+    line-height: unset;
+    
     background: linear-gradient(
         to right,
         #000000 20%,
@@ -73,15 +76,22 @@ gemini-dropdown gemini-outline .gemini-input{
         #aa98ae 70%,
         #000000 80%
         );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-fill-color: transparent;
-    background-size: 500% auto;
-    animation: textShine 2s ease-in infinite;
-
-    cursor: pointer;
-    user-select: none;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-fill-color: transparent;
+        background-size: 500% auto;
+        animation: textShine 2s ease-in infinite;
+        
+        cursor: pointer;
+        user-select: none;
+}
+gemini-dropdown gemini-outline .gemini-input option{
+    white-space: unset;
+    padding-inline: 0;
+    min-block-size: auto;
+    padding-block: 0;
+    display: unset;
 }
 
 gemini-outline button{
@@ -90,7 +100,7 @@ gemini-outline button{
     
     background-color: transparent;
     border: none;
-    
+        
     height: calc(100% - 10px) !important;
     aspect-ratio: 1/1;
     display: flex;

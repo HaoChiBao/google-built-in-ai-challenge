@@ -178,6 +178,10 @@ const main = async () => {
         });
         dropdown.addEventListener('click', (e) => {e.stopPropagation()})
         dropdown.addEventListener('change', (e) => {
+
+            // check if user has generated content toggled off
+            if (!input.checked) return
+
             const selection = e.target.selectedIndex
 
             const current_generated = document.querySelector(`#${id}-short.selection${selection}`)

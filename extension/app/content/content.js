@@ -243,8 +243,8 @@ const main = async () => {
         document.body.appendChild(holder)
     }
 
-    const attachHighlightText = (ai_response, id, color) => {
-        
+    const attachHighlightText = async (ai_response, id, color, filter) => {
+
         const filler = document.createElement('gemini-highlight-gen')
         // filler.innerHTML = html.html
         filler.innerHTML = ai_response
@@ -252,6 +252,24 @@ const main = async () => {
         filler.id = `${id}-short`
         filler.classList.add('active')
         filler.style.setProperty('--text-color', color)
+
+        const copy = document.createElement('gemini-copy')
+
+        const copy_inner = document.createElement('div')
+        copy_inner.className = 'copy_inner'
+        // copy_inner.innerHTML = 'copy'
+
+        const copy_img = document.createElement('img')
+        copy_img.src = await chrome.runtime.getURL('images/copy-smol.png')
+        copy_img.style.filter = filter
+
+
+        copy_inner.appendChild(copy_img)
+        copy.appendChild(copy_inner)
+
+        filler.appendChild(copy)
+
+
         
         // hide original highlight text and display generated
         filler.classList.add('enter')
@@ -489,7 +507,8 @@ const main = async () => {
                     if (status_c) {
                         const concise = request.concise
                         const color_c = request.color
-                        attachHighlightText(concise, id_c, color_c)
+                        const filter_c  = request.filter
+                        attachHighlightText(concise, id_c, color_c, filter_c)
                     } else {
                         unhighlightSpan(id_c)
                     }

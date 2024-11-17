@@ -1,5 +1,5 @@
 import AIResponse from "./async/func/AIResponse.js"
-import { Solver, Color } from "./async/func/colorToFilterCSS.js"
+import { Color, Solver, componentToHex, rgbSeparator } from "./async/func/colorToFilterCSS.js"
 
 const main = async () => {
     
@@ -31,18 +31,30 @@ const main = async () => {
                 const id_c = request.id
                 const color_c = request.most_common_color
 
+                // ____________________ get filter color for copy button in the response ____________________
+                
+                const rgb = rgbSeparator(color_c)
+                // console.log(rgb)
+
+                const color = new Color(rgb[0], rgb[1], rgb[2]);
+                const solver = new Solver(color);
+                const result = solver.solve();
+                const filter = result.filter
+
+                // console.log(result)
+
                 // ____________________ get the ai response ____________________
 
                 // const context = "Summarize the following text by 50% (be clear and concise):\n"
                 // const context = "rewrite the following text shorter by 50% :\n"
                 // const context = "rewrite the following text shorter (be clear and concise):\n"
                 const context = "condense the following text (be concise):\n"
-
                 const response = await AIResponse(context + text_c) 
 
+                // return response. TRUE if response returns successfully
                 if (response.status){
                     const ai_response = response.ai_response
-                    return {action, status: true, concise: ai_response, id: id_c, color: color_c}
+                    return {action, status: true, concise: ai_response, id: id_c, color: color_c, filter}
                 }
 
                 return {action, status: false, id: id_c}

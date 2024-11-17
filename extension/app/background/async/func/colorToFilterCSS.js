@@ -203,8 +203,33 @@ class Solver {
 
     css(filters) {
         function fmt(idx, multiplier = 1) { return Math.round(filters[idx] * multiplier); }
-        return `filter: invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%);`;
+        // return `filter: invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%);`;
+        return `invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%)`;
     }
 }
 
-export {Color, Solver}
+const componentToHex = (c) => {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+const rgbSeparator = (rgbString) => {
+    const arr = rgbString.split(',')
+    // console.log(arr)
+
+    const rgb = []
+    arr.forEach(substring => {
+
+        const s1 = substring.split('(')
+        const s2 = s1[s1.length - 1].split(')')
+        const s3 = s2[0].split(' ')
+        const s4 = s3[s3.length - 1]
+        // console.log(s4)
+        rgb.push(s4)
+    });
+
+    return rgb
+}
+  
+
+export {Color, Solver, componentToHex, rgbSeparator}

@@ -9,6 +9,9 @@ gemini-dropdown{
     opacity: 0;
     pointer-events: none;
 
+    display: flex;
+
+    gap: 8px;
 }
 
 gemini-dropdown gemini-outline{
@@ -44,7 +47,7 @@ gemini-dropdown gemini-outline{
 gemini-dropdown.active{
     opacity: 1;
     pointer-events: all;
-    display: unset;
+    /* display: unset; */
 }
 gemini-dropdown.active gemini-outline{
     opacity: 1;
@@ -281,56 +284,33 @@ gemini-highlight-gen.active.enter{
 
 
 /* copy icon shit */
+gemini-outline.copy{
+    padding: 0 !important;;
+}
+
 gemini-copy {
     position: relative;
-    display: inline;
-
-    height: 20px;
-
-    transform: translate(100%);
-    opacity: 0;
-
-    transition: 0.4s;
-}
-
-
-gemini-highlight-gen.active.hover gemini-copy{
-    transform: translate(0%);
-    opacity: 1;
-}
-
-gemini-copy .copy_inner{
-    position: absolute;
+    
+    height: 100%;
+    aspect-ratio: 1/1;
     
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    left: 0;
-    top: 50%;
+}
 
-    transform: translate(0%, -50%);
+gemini-copy img{
+    height: calc(50%);
+    user-select: none;
+    pointer-events: none;
 
-    height: 18px;
-    width: 18px;
-    padding: 0;
     transition: 0.4s;
-
-    padding: 2px;
-    border-radius: 5px;
-    background-color: white;
-    
-    -webkit-box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.5);
-    -moz-box-shadow: 0px 2px 0px 1px rgba(0,0,0,0.5);
-    box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.5);
+    opacity: 0.5;
 }
 
-gemini-copy .copy_inner img{
-    height: 100%;
-}
-
-gemini-copy .copy_inner:hover{
-    transform: translate(0%, -50%) scale(1.1);
+gemini-copy:hover img{
+    transform: scale(1.15);
+    opacity: 1;
 }
 
 /* custom toggle css */

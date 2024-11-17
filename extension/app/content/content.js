@@ -144,10 +144,22 @@ const main = async () => {
         toggle.remove()
     }
 
-    const attachHighlightToggle = (id) => {
+    const attachHighlightToggle = async (id) => {
         const holder = document.createElement('gemini-dropdown')
         holder.id = `${id}-toggle`
         const inside = document.createElement('gemini-outline')
+
+        const copy_holder = document.createElement('gemini-outline')
+        copy_holder.className = 'copy'
+        
+        const copy = document.createElement('gemini-copy')
+
+        const copy_img = document.createElement('img')
+        copy_img.src = await chrome.runtime.getURL('images/copy-smol.png')
+        
+        copy.appendChild(copy_img)
+        copy_holder.appendChild(copy)
+
 
         const dropdown = document.createElement('select')
         dropdown.type = 'dropdown'
@@ -238,7 +250,10 @@ const main = async () => {
 
         inside.appendChild(toggle)
         inside.appendChild(dropdown)
+
         holder.appendChild(inside)
+
+        holder.appendChild(copy_holder)
 
         document.body.appendChild(holder)
     }
@@ -252,24 +267,6 @@ const main = async () => {
         filler.id = `${id}-short`
         filler.classList.add('active')
         filler.style.setProperty('--text-color', color)
-
-        const copy = document.createElement('gemini-copy')
-
-        const copy_inner = document.createElement('div')
-        copy_inner.className = 'copy_inner'
-        // copy_inner.innerHTML = 'copy'
-
-        const copy_img = document.createElement('img')
-        copy_img.src = await chrome.runtime.getURL('images/copy-smol.png')
-        copy_img.style.filter = filter
-
-
-        copy_inner.appendChild(copy_img)
-        copy.appendChild(copy_inner)
-
-        filler.appendChild(copy)
-
-
         
         // hide original highlight text and display generated
         filler.classList.add('enter')

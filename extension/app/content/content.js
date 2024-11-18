@@ -153,18 +153,7 @@ const main = async () => {
         holder.id = `${id}-toggle`
         const inside = document.createElement('gemini-outline')
 
-        const copy_holder = document.createElement('gemini-outline')
-        copy_holder.className = 'copy'
-        
-        const copy = document.createElement('gemini-copy')
-
-        const copy_img = document.createElement('img')
-        copy_img.src = await chrome.runtime.getURL('images/copy-smol.png')
-        
-        copy.appendChild(copy_img)
-        copy_holder.appendChild(copy)
-
-
+        // select which generated text to display (concise or elaborate or etc)
         const dropdown = document.createElement('select')
         dropdown.type = 'dropdown'
         dropdown.className = 'gemini-input'
@@ -200,6 +189,28 @@ const main = async () => {
                 }, 400)
             })
 
+        })
+
+        
+        // copy text button
+        const copy_holder = document.createElement('gemini-outline')
+        copy_holder.className = 'copy'
+        
+        const copy = document.createElement('gemini-copy')
+
+        const copy_img = document.createElement('img')
+        copy_img.src = await chrome.runtime.getURL('images/copy-smol.png')
+        
+        copy.appendChild(copy_img)
+        copy_holder.appendChild(copy)
+
+        copy.addEventListener('click', () => {
+            // get current selectedINdex
+            const selection = dropdown.selectedIndex
+            
+            const generated_text = document.querySelector(`#${id}-short.selection${selection}`)
+            const text_content = generated_text.textContent
+            navigator.clipboard.writeText(text_content);
         })
 
         // create toggle element

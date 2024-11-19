@@ -20,7 +20,9 @@ Things to add:
     * this could be located next to copy or it can be in its own module
 
 * Copied text is saved to a google doc or something
+
 * Save highlights locally
+
 * Add some collaboration feature
 
 * Highlight text and it will highlight only the key words of in the paragraph

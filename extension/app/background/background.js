@@ -25,21 +25,21 @@ const main = async () => {
         
         switch(action){
 
-            case 'keywords':
-                const text_k = request.highlightedText
-                const id_k = request.id
+            // case 'keywords':
+            //     const text_k = request.highlightedText
+            //     const id_k = request.id
 
-                const response_k = await findKeywords(text_k)
+            //     const response_k = await findKeywords(text_k)
 
-                // console.log(response_k.keywords)
+            //     // console.log(response_k.keywords)
 
-                if(response_k.status){
-                    return {action, id: id_k, keywords: response_k.keywords, status: true}
-                }
-                return {action, id: id_k, status: false}
+            //     if(response_k.status){
+            //         return {action, id: id_k, keywords: response_k.keywords, status: true}
+            //     }
+            //     return {action, id: id_k, status: false}
 
 
-                break;
+            //     break;
             case 'generate':
                 console.log('generating text...')
                 const text_c = request.highlightedText
@@ -69,8 +69,10 @@ const main = async () => {
                 const short = await AIResponse(concise_context + text_c) 
                 const long = await AIResponse(elaborate_context + text_c) 
 
+                const keywords = await findKeywords(text_c)
+
                 // return response. TRUE if response returns successfully
-                if (short.status && long.status){
+                if (short.status && long.status && keywords.status){
                     const concise = short.ai_response
                     const elaborate = long.ai_response
                     return {
@@ -79,6 +81,7 @@ const main = async () => {
                         elaborate,
                         id: id_c, 
                         color: color_c, 
+                        keywords: keywords.keywords,
                         filter,
                         start,
                     }

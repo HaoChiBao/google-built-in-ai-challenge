@@ -382,6 +382,40 @@ const main = async () => {
         first_highlight.parentElement.insertBefore(filler, first_highlight)
         
     }
+
+    const attachKeyWords = (keywords, id) => {
+        const highlights = document.querySelectorAll(`#${id}`)
+
+        highlights.forEach(highlight => {
+            const text = highlight.textContent
+
+            // check if the text has any keywords
+            let is_substring = false
+            let substring = null
+            for(let i = 0; i < keywords.length; i++){
+                const current = keywords[i]
+
+                if( text.includes(current) ){
+                    is_substring = true
+                    substring = current
+                    break
+                }
+            }
+
+            // highlight only the specific keywords
+            if (is_substring) {
+
+                const index = text.indexOf(substring)
+                
+                // Split the original text into three parts: before, the keyword, and after
+                const beforeText = text.slice(0, index);
+                const afterText = text.slice(index + substring.length);
+
+                // Create a new HTML structure with the keyword bolded
+                highlight.innerHTML = `${beforeText}<gemini-keyword>${substring}</gemini-keyword>${afterText}`;
+            }
+        })
+    }
     
     // if user unselects text then remove the floating icon
     document.addEventListener('selectionchange', function() {
@@ -546,13 +580,13 @@ const main = async () => {
             
             attachHighlightToggle(id)
 
-            await sendMessage({
-                action: 'keywords',
-                highlightedText,
-                id,
-            })
+            // await sendMessage({
+            //     action: 'keywords',
+            //     highlightedText,
+            //     id,
+            // })
             
-            return
+            // return
             console.log('color:', most_common_color)
             await sendMessage({
                 action: 'generate',
@@ -575,57 +609,7 @@ const main = async () => {
             const action = request.action
             // console.log(request)
             switch(action){
-                
-                case 'keywords':
-                    const status_k = request.status
-                    const id_k = request.id
-
-                    
-                    if (status_k){
-                        const keywords = request.keywords
-                        console.log(keywords)
-                        const highlights = document.querySelectorAll(`#${id_k}`)
-
-                        highlights.forEach(highlight => {
-                            const text = highlight.textContent
-
-                            // check if the text has any keywords
-                            let is_substring = false
-                            let substring = null
-                            for(let i = 0; i < keywords.length; i++){
-                                const current = keywords[i]
-
-                                if( text.includes(current) ){
-                                    is_substring = true
-                                    substring = current
-                                    break
-                                }
-                            }
-
-                            // highlight only the specific keywords
-                            if (is_substring) {
-
-                                const index = text.indexOf(substring)
-                                
-                                // Split the original text into three parts: before, the keyword, and after
-                                const beforeText = text.slice(0, index);
-                                const afterText = text.slice(index + substring.length);
-
-                                // Create a new HTML structure with the keyword bolded
-                                highlight.innerHTML = `${beforeText}<gemini-keyword>${substring}</gemini-keyword>${afterText}`;
-
-                            } else {
-
-                            }
-
-                        })
-
-                    } else {
-                        console.warn('shit...')
-                    }
-
-
-                    break
+    
                 case 'generate':
                     console.log(request)
                     const status_c = request.status
@@ -634,6 +618,7 @@ const main = async () => {
                     if (status_c) {
                         const concise = request.concise
                         const elaborate = request.elaborate
+                        const keywords = request.keywords
 
                         const color_c = request.color
                         const filter_c  = request.filter
@@ -646,6 +631,8 @@ const main = async () => {
 
                         attachHighlightText(elaborate, id_c, color_c, filter_c, 1, start)
                         attachHighlightText(concise, id_c, color_c, filter_c, 0, start)
+
+                        attachKeyWords(keywords, id_c)
 
                         // toggle box on
                         const checkmark = dropdown.querySelector('input')

@@ -50,6 +50,7 @@ const main = async () => {
     const outline = document.createElement('gemini-outline')
 
     const submit_btn = document.createElement('button')
+    submit_btn.className = 'gen-submit'
     
     const dropdown = document.createElement('select')
     dropdown.type = 'dropdown'
@@ -203,24 +204,44 @@ const main = async () => {
         
         copy.appendChild(copy_img)
         copy_holder.appendChild(copy)
-
-        copy.addEventListener('click', () => {
+        
+        copy.addEventListener('click', async () => {
             // get current selectedINdex
             const selection = dropdown.selectedIndex
             
             const generated_text = document.querySelector(`#${id}-short.selection${selection}`)
             const text_content = generated_text.textContent
             navigator.clipboard.writeText(text_content);
+            
+            
+            copy_img.style.height = 0
+            setTimeout( async () => {
+                copy_img.src = await chrome.runtime.getURL('images/checkmark.png')
+                copy_img.style.height = '50%'
+                
+                copy.onmouseout = async () => {
+                    copy_img.style.height = 0
+                    
+                    setTimeout( async () => {
+                        copy_img.src = await chrome.runtime.getURL('images/copy-smol.png')
+                        copy_img.style.height = '50%'
+                        copy.onmouseout = null
+                    }, 400)
+                }
+
+            }, 400)
+            
+
         })
 
         // create toggle element
         // custom switch: start _____________________________________
         const toggle = document.createElement('span')
-        toggle.className = 'custom-switch'
+        toggle.className = 'gemini-switch'
         
         const input = document.createElement('input')
         input.id = `toggle-goal-stats-${id}`
-        input.class = 'custom-switch-active'
+        input.class = 'gemini-switch-active'
         input.type = 'checkbox'
         
         const label = document.createElement('label')

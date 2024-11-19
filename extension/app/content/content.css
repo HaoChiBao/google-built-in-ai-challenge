@@ -107,23 +107,26 @@ gemini-dropdown gemini-outline .gemini-input option{
     display: unset;
 }
 
-gemini-outline button{
-    margin: 0;
-    padding: 0;
+gemini-outline .gen-submit{
+    margin: 0 !important;
+    padding: 0 !important;
     
-    background-color: transparent;
-    border: none;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
         
     height: calc(100% - 10px) !important;
-    aspect-ratio: 1/1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    aspect-ratio: 1/1 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 
-    cursor: pointer;
+    text-decoration: none !important;
+
+    cursor: pointer !important;
 }
 
-gemini-outline button img{
+gemini-outline .gen-submit img{
     /* height: calc(100% - 10px) !important;
     aspect-ratio: 1/1; */
 
@@ -138,7 +141,7 @@ gemini-outline button img{
     transition: 0.4s;
 }
 
-gemini-dropdown.active button:hover img{
+gemini-dropdown.active .gen-submit:hover img{
     transform: scale(1);
 }
 
@@ -323,9 +326,9 @@ gemini-copy:hover img{
     opacity: 1;
 }
 
-/* custom toggle css */
+/* gemini toggle css */
 
-.custom-switch{
+.gemini-switch{
     --switch-width: 30px;
 	--switch-height: calc(var(--switch-width) / 1.8);
 
@@ -344,13 +347,13 @@ gemini-copy:hover img{
     align-items: center;
 }
 
-.custom-switch input[type=checkbox] {
+.gemini-switch input[type=checkbox] {
     height: 0;
     width: 0;
     visibility: hidden;
     display: none;
 }
-.custom-switch label {
+.gemini-switch label {
     position: relative;
     top: 0;
     left: 0;
@@ -366,7 +369,7 @@ gemini-copy:hover img{
     border-radius: var(--border-radius);
     box-sizing: border-box;
 }
-.custom-switch label:after {
+.gemini-switch label:after {
     content: '';
     position: absolute;
     top: var(--gap-vertical);
@@ -377,13 +380,13 @@ gemini-copy:hover img{
     border-radius: 100px;
     transition: 0.3s;
 }
-.custom-switch input:checked + label {
+.gemini-switch input:checked + label {
     background: var(--switch-background);
 }
-.custom-switch input:checked + label:after {
+.gemini-switch input:checked + label:after {
     left: calc(90%);
     transform: translateX(-100%);
 }
-.custom-switch label:active:after {
+.gemini-switch label:active:after {
     width: calc(var(--switch-width) / 2);
 }

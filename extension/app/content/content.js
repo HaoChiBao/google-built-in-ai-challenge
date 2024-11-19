@@ -549,6 +549,7 @@ const main = async () => {
             await sendMessage({
                 action: 'keywords',
                 highlightedText,
+                id,
             })
             
             return
@@ -579,9 +580,46 @@ const main = async () => {
                     const status_k = request.status
                     const id_k = request.id
 
+                    
                     if (status_k){
                         const keywords = request.keywords
-                        
+                        console.log(keywords)
+                        const highlights = document.querySelectorAll(`#${id_k}`)
+
+                        highlights.forEach(highlight => {
+                            const text = highlight.textContent
+
+                            // check if the text has any keywords
+                            let is_substring = false
+                            let substring = null
+                            for(let i = 0; i < keywords.length; i++){
+                                const current = keywords[i]
+
+                                if( text.includes(current) ){
+                                    is_substring = true
+                                    substring = current
+                                    break
+                                }
+                            }
+
+                            // highlight only the specific keywords
+                            if (is_substring) {
+
+                                const index = text.indexOf(substring)
+                                
+                                // Split the original text into three parts: before, the keyword, and after
+                                const beforeText = text.slice(0, index);
+                                const afterText = text.slice(index + substring.length);
+
+                                // Create a new HTML structure with the keyword bolded
+                                highlight.innerHTML = `${beforeText}<gemini-keyword>${substring}</gemini-keyword>${afterText}`;
+
+                            } else {
+
+                            }
+
+                        })
+
                     } else {
                         console.warn('shit...')
                     }

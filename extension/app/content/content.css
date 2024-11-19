@@ -151,8 +151,21 @@ gemini-dropdown.active .gen-submit:hover img{
 gemini-highlight{
     display: none;
     opacity: 0;
-
+    
     transition: 0.4s;
+}
+
+gemini-highlight.active.hover gemini-keyword{
+    
+    --color-main: #7eceffbb;
+    /* --color-main: #7ECEFF7e; */
+    --color-glare: #f9ddff7e;
+
+    border-radius: 2px;
+    /* background: linear-gradient(0deg, var(--color-main) ,var(--color-main), var(--color-main), var(--color-glare), #00000000, #00000000, #00000000); */
+    background: linear-gradient(0deg, var(--color-main) ,var(--color-main), var(--color-main), var(--color-glare), var(--color-main), var(--color-main), var(--color-main));
+    background-size: 400% 400%;
+    animation: gradient 3s linear infinite;
 }
 
 gemini-highlight.active{

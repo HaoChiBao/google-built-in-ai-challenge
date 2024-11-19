@@ -537,13 +537,21 @@ const main = async () => {
             const id = generateID()
             console.log('highlight:', id)
 
+            
+            
             // highlight selected range
             highlightRange(range, id);
             // remove user select highlight
             selection.removeAllRanges();
-
+            
             attachHighlightToggle(id)
 
+            await sendMessage({
+                action: 'keywords',
+                highlightedText,
+            })
+            
+            return
             console.log('color:', most_common_color)
             await sendMessage({
                 action: 'generate',
@@ -567,7 +575,19 @@ const main = async () => {
             // console.log(request)
             switch(action){
                 
-                // case 'concise':
+                case 'keywords':
+                    const status_k = request.status
+                    const id_k = request.id
+
+                    if (status_k){
+                        const keywords = request.keywords
+                        
+                    } else {
+                        console.warn('shit...')
+                    }
+
+
+                    break
                 case 'generate':
                     console.log(request)
                     const status_c = request.status

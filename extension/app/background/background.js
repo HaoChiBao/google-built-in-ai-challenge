@@ -1,4 +1,4 @@
-import AIResponse from "./async/func/AIResponse.js"
+import {AIResponse, findKeywords} from "./async/func/AIResponse.js"
 import { Color, Solver, componentToHex, rgbSeparator } from "./async/func/colorToFilterCSS.js"
 
 const main = async () => {
@@ -25,7 +25,21 @@ const main = async () => {
         
         switch(action){
 
-            // case 'concise':
+            case 'keywords':
+                const text_k = request.highlightedText
+                const id_k = request.id
+
+                const response_k = await findKeywords(text_k)
+
+                // console.log(response_k.keywords)
+
+                if(response_k.status){
+                    return {action, id: id_k, keywords: response_k.keywords, status: true}
+                }
+                return {action, id: id_k, status: false}
+
+
+                break;
             case 'generate':
                 console.log('generating text...')
                 const text_c = request.highlightedText

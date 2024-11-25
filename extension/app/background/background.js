@@ -66,11 +66,12 @@ const main = async () => {
                 // const context = "rewrite the following text shorter (be clear and concise):\n"
                 const concise_context = "condense the following text (be concise):\n"
                 const elaborate_context = "make the following text a TINY BIT longer:\n"
-                const short = await AIResponse(concise_context + text_c) 
-                const long = await AIResponse(elaborate_context + text_c) 
+                const short = await AIResponse(text_c, concise_context) 
+                const long = await AIResponse(text_c, elaborate_context) 
 
                 const keywords = await findKeywords(text_c)
 
+                console.log(keywords.keywords)
                 // return response. TRUE if response returns successfully
                 if (short.status && long.status && keywords.status){
                     const concise = short.ai_response

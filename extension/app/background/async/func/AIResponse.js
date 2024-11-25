@@ -1,8 +1,14 @@
-const AIResponse = async (input) => {
+const AIResponse = async (input, context) => {
     // replace with whatever
     try {
         const session = await ai.languageModel.create()
-        const ai_response = await session.prompt(input)
+        const ai_response = await session.prompt(input + context)
+
+        // const rewriter = await ai.rewriter.create({
+        //     sharedContent: context,
+        // })
+        // const ai_response = await rewriter.rewrite(input)
+
         return {
             status: true,
             ai_response
